@@ -70,14 +70,48 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         title: Text(widget.title),
       ),
-      body: Center(
-        child: OrientationBuilder(
-          builder: (context, orientation) => _buildList(
-              context,
-              orientation == Orientation.portrait
-                  ? Axis.vertical
-                  : Axis.horizontal),
-        ),
+      body: Column(
+        children: [
+          Slidable(child: IconSlideAction(
+            color: Color(0xff58b213),
+            iconWidget: Text('assign_code',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 12,
+                  letterSpacing: 0.40,
+                )),
+            onTap: () {
+
+            },closeOnTap: true,
+          ),actionPane: SlidableDrawerActionPane(),      secondaryActions: <Widget>[
+            IconSlideAction(
+              caption: 'More',
+              color: Colors.grey.shade200,
+              icon: Icons.more_horiz,
+              onTap: () => _showSnackBar(context, 'More'),
+              closeOnTap: false,
+            ),
+            IconSlideAction(
+              caption: 'Delete',
+              color: Colors.red,
+              icon: Icons.delete,
+              onTap: () => _showSnackBar(context, 'Delete'),
+            ),
+          ],      controller: slidableController,)
+          ,
+          Expanded(
+            child: Center(
+              child: OrientationBuilder(
+                builder: (context, orientation) => _buildList(
+                    context,
+                    orientation == Orientation.portrait
+                        ? Axis.vertical
+                        : Axis.horizontal),
+              ),
+            ),
+          ),
+        ],
       ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: _fabColor,

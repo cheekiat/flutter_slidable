@@ -31,8 +31,14 @@ abstract class ClosableSlideAction extends StatelessWidget {
   /// Calls [onTap] if not null and closes the closest [Slidable]
   /// that encloses the given context.
   void _handleCloseAfterTap(BuildContext context) {
-    onTap?.call();
-    Slidable.of(context)?.close();
+    // onTap?.call();
+    // Slidable.of(context)?.close();
+
+    if(Slidable.of(context)!.widget.controller!.activeState == null || Slidable.of(context)!.widget.controller!.activeState!.widget != Slidable.of(context)!.widget){
+      Slidable.of(context)!.open(actionType: SlideActionType.secondary);
+    }else{
+      Slidable.of(context)!.close();
+    }
   }
 
   @override
