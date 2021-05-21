@@ -31,7 +31,7 @@ abstract class ClosableSlideAction extends StatelessWidget {
   /// Calls [onTap] if not null and closes the closest [Slidable]
   /// that encloses the given context.
   void _handleCloseAfterTap(BuildContext context) {
-    // onTap?.call();
+    onTap?.call();
     // Slidable.of(context)?.close();
 
     if(Slidable.of(context)!.widget.controller!.activeState == null || Slidable.of(context)!.widget.controller!.activeState!.widget != Slidable.of(context)!.widget){
@@ -150,7 +150,7 @@ class IconSlideAction extends ClosableSlideAction {
 
   /// The color used for [icon] and [caption].
   final Color? foregroundColor;
-
+  
   @override
   Widget buildAction(BuildContext context) {
     final Color estimatedColor =
@@ -200,3 +200,100 @@ class IconSlideAction extends ClosableSlideAction {
     );
   }
 }
+
+class IconSlideCustomAction extends ClosableSlideAction {
+  /// Creates a slide action with an icon, a [caption] if set and a
+  /// background color.
+  ///
+  /// The [closeOnTap] argument must not be null.
+  const IconSlideCustomAction({
+    Key? key,
+    this.icon,
+    this.openWidget,
+    this.closeWidget,
+    this.caption,
+    Color? color,
+    this.foregroundColor,
+    VoidCallback? onTap,
+    bool closeOnTap = _kCloseOnTap,
+  })  : assert(icon != null || openWidget != null,
+            'Either set icon or iconWidget.'),
+        super(
+          key: key,
+          color: color ?? Colors.white,
+          onTap: onTap,
+          closeOnTap: closeOnTap,
+        );
+
+  /// The icon to show.
+  final IconData? icon;
+
+  /// A custom widget to represent the icon.
+  /// If both [icon] and [openWidget] are set, they will be shown at the same
+  /// time.
+  final Widget? openWidget;
+  final Widget? closeWidget;
+
+  /// The caption below the icon.
+  final String? caption;
+
+  /// The color used for [icon] and [caption].
+  final Color? foregroundColor;
+  
+  @override
+  Widget buildAction(BuildContext context) {
+    final Color estimatedColor =
+        ThemeData.estimateBrightnessForColor(color!) == Brightness.light
+            ? Colors.black
+            : Colors.white;
+
+    final List<Widget> widgets = [];
+
+    if (icon != null) {
+      widgets.add(
+        Flexible(
+          child: Icon(
+            icon,
+            color: foregroundColor ?? estimatedColor,
+          ),
+        ),
+      );
+    }
+
+    if (openWidget != null) {
+      if(Slidable.of(context)!.widget.controller!.activeState == null || Slidable.of(context)!.widget.controller!.activeState!.widget != Slidable.of(context)!.widget){
+        widgets.add(
+          Flexible(child: closeWidget!),
+        );
+      }else{
+        widgets.add(
+          Flexible(child: openWidget!),
+        );
+      }
+  
+    }
+
+    if (caption != null) {
+      widgets.add(
+        Flexible(
+          child: Text(
+            caption!,
+            overflow: TextOverflow.ellipsis,
+            style: Theme.of(context)
+                .primaryTextTheme
+                .caption!
+                .copyWith(color: foregroundColor ?? estimatedColor),
+          ),
+        ),
+      );
+    }
+
+    return Center(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: widgets,
+      ),
+    );
+  }
+}
+

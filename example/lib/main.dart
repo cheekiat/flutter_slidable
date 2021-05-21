@@ -72,9 +72,16 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       body: Column(
         children: [
-          Slidable(child: IconSlideAction(
+          Slidable(child: IconSlideCustomAction(
             color: Color(0xff58b213),
-            iconWidget: Text('assign_code',
+            openWidget: Text('open',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 12,
+                  letterSpacing: 0.40,
+                )),
+            closeWidget: Text('close',
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   color: Colors.white,
@@ -83,7 +90,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 )),
             onTap: () {
 
-            },closeOnTap: true,
+            },
           ),actionPane: SlidableDrawerActionPane(),      secondaryActions: <Widget>[
             IconSlideAction(
               caption: 'More',
