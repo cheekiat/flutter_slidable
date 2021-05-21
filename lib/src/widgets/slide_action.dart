@@ -260,12 +260,12 @@ class IconSlideCustomAction extends ClosableSlideAction {
       );
     }
 
-    if (openWidget != null) {
+    if (closeWidget != null) {
       if(Slidable.of(context)!.widget.controller!.activeState == null || Slidable.of(context)!.widget.controller!.activeState!.widget != Slidable.of(context)!.widget){
         widgets.add(
           Flexible(child: closeWidget!),
         );
-      }else{
+      }else if (openWidget != null) {
         widgets.add(
           Flexible(child: openWidget!),
         );
